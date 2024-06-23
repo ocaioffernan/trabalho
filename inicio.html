@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja de Produtos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="cart.css">
+    <script defer src="script.js"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 1em 0;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .sidebar {
+        width: 250px;
+        background-color: #343a40;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding-top: 20px;
+        z-index: 2;
+        overflow-y: auto;
+    }
+
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar ul li {
+        padding: 15px;
+    }
+
+    .sidebar ul li a {
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.3s;
+    }
+
+    .sidebar ul li a:hover {
+        background-color: #495057;
+    }
+
+    .sidebar ul li a .icon {
+        margin-right: 10px;
+    }
+
+        .container {
+            margin-left: 335px;
+            padding-top: 70px;
+            padding: 20px;
+            width: calc(100% - 260px);
+        }
+
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .dashboard .card {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px;
+            flex: 1 1 calc(33.333% - 20px);
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <ul>
+        <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
+        <li><a href="pdv.html"><i class="fas fa-cash-register icon"></i> PDV</a></li>
+        <li><a href="produtos.html"><i class="fas fa-boxes icon"></i> Produtos</a></li>
+        <li><a href="clientes.html"><i class="fas fa-users icon"></i> Clientes</a></li>
+        <li><a href="fornecedores.html"><i class="fas fa-truck icon"></i> Fornecedores</a></li>
+        <li><a href="relatorios.html"><i class="fas fa-chart-line icon"></i> Relatórios</a></li>
+    </ul>
+</div>
+
+<div class="container">
+    <h2>Dashboard</h2>
+    <div class="dashboard">
+        <div class="card">
+            <h3>Vendas</h3>
+            <p>Resumo das vendas.</p>
+        </div>
+        <div class="card">
+            <h3>Clientes</h3>
+            <p>Resumo dos clientes.</p>
+        </div>
+        <div class="card">
+            <h3>Estoque</h3>
+            <p>Resumo do estoque.</p>
+        </div>
+        <div class="card">
+            <h3>Financeiro</h3>
+            <p>Resumo financeiro.</p>
+        </div>
+        <div class="card">
+            <h3>Pedidos</h3>
+            <p>Resumo dos pedidos.</p>
+        </div>
+        <div class="card">
+            <h3>Relatórios</h3>
+            <p>Resumo dos relatórios.</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

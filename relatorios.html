@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - Loja de Produtos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="reports.css">
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            justify-content: center; /* Centraliza o conteúdo horizontalmente */
+            align-items: center; /* Centraliza o conteúdo verticalmente */
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+            z-index: 2;
+            overflow-y: auto;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #495057;
+        }
+
+        .sidebar ul li a .icon {
+            margin-right: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Centraliza o conteúdo horizontalmente */
+            max-width: 1200px; /* Define a largura máxima da página */
+            width: 100%;
+            padding: 20px;
+            margin-left: 260px; /* Largura da sidebar */
+        }
+
+        .report {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 1 1 100%;
+            margin-bottom: 20px;
+        }
+
+        .report h2 {
+            margin-top: 0;
+            color: #343a40;
+        }
+
+        .filters {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filters select {
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        .sales-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .sales-table th, .sales-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .sales-table th {
+            background-color: #f0f0f0;
+        }
+
+        .total-section {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-section .payment-total {
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .total-section .payment-total:nth-child(odd) {
+            background-color: #f0f0f0;
+        }
+
+        .total-section .total-amount {
+            font-weight: bold;
+        }
+
+        .pdf-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .pdf-button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none; /* Esconde a sidebar em dispositivos menores */
+            }
+
+            .report {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <ul>
+        <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
+        <li><a href="pdv.html"><i class="fas fa-cash-register icon"></i> PDV</a></li>
+        <li><a href="produtos.html"><i class="fas fa-boxes icon"></i> Produtos</a></li>
+        <li><a href="clientes.html"><i class="fas fa-users icon"></i> Clientes</a></li>
+        <li><a href="fornecedores.html"><i class="fas fa-truck icon"></i> Fornecedores</a></li>
+        <li><a href="relatorios.html"><i class="fas fa-chart-line icon"></i> Relatórios</a></li>
+    </ul>
+</div>
+
+<div class="container">
+    <div class="report">
+        <h2>Relatório de Vendas</h2>
+        
+        <div class="filters">
+            <label for="payment-filter">Filtrar por Forma de Pagamento:</label>
+            <select id="payment-filter" onchange="filterSales(this.value)">
+                <option value="todos">Todos</option>
+                <option value="credito">Cartão de Crédito</option>
+                <option value="debito">Cartão de Débito</option>
+                <option value="dinheiro">Dinheiro</option>
+            </select>
+
+            <label for="date-filter">Filtrar por Período:</label>
+            <input type="date" id="date-filter" onchange="filterSalesByDate()">
+        </div>
+
+        <table class="sales-table" id="sales-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Forma de Pagamento</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody id="sales-list">
+                <!-- Aqui serão adicionadas as vendas dinamicamente -->
+            </tbody>
+        </table>
+
+        <div class="total-section">
+            <div class="payment-total" id="credit-total">
+                Forma de pagamento - Cartão de Crédito: R$ <span id="credit-amount">0.00</span>
+            </div>
+            <div class="payment-total" id="debit-total">
+                Forma de pagamento - Cartão de Débito: R$ <span id="debit-amount">0.00</span>
+            </div>
+            <div class="payment-total" id="cash-total">
+                Forma de pagamento - Dinheiro: R$ <span id="cash-amount">0.00</span>
+            </div>
+            <div class="payment-total total-amount">
+                Total de Vendas: R$ <span id="total-amount">0.00</span>
+            </div>
+        </div>
+
+        <button class="pdf-button" onclick="generatePDF()">Gerar PDF</button>
+    </div>
+</div>
+
+<script src="reports.js"></script>
+</body>
+</html>
