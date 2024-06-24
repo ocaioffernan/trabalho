@@ -6,56 +6,61 @@
     <title>PDV - Loja de Produtos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="cart.css">
-    <script defer src="pdv.js"></script>
+    <script defer src="script.js"></script>
     <style>
-        body {
+    body {
     display: flex;
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
     height: 100vh;
-    justify-content: center; /* Centraliza o conteúdo horizontalmente */
-    align-items: center; /* Centraliza o conteúdo verticalmente */
+    /* justify-content: center;  */
+    align-items: center; 
     }
 
     .sidebar {
-        width: 250px;
-        background-color: #343a40;
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        padding-top: 20px;
-        z-index: 2;
-        overflow-y: auto;
-    }
+            width: 250px;
+            background-color: #343a40;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Sidebar escondida inicialmente */
+            padding-top: 20px;
+            z-index: 2;
+            overflow-y: auto;
+            transition: left 0.3s;
+        }
 
-    .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
+        .sidebar.hidden {
+            left: -250px; /* Posição para esconder a sidebar completamente */
+        }
 
-    .sidebar ul li {
-        padding: 15px;
-    }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
 
-    .sidebar ul li a {
-        color: white;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        transition: background-color 0.3s;
-    }
+        .sidebar ul li {
+            padding: 15px;
+        }
 
-    .sidebar ul li a:hover {
-        background-color: #495057;
-    }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
 
-    .sidebar ul li a .icon {
-        margin-right: 10px;
-    }
+        .sidebar ul li a:hover {
+            background-color: #495057;
+        }
+
+        .sidebar ul li a .icon {
+            margin-right: 15px; /* Espaçamento entre os ícones e o nome */
+        }
 
 .container {
     display: flex;
@@ -213,10 +218,26 @@
     }
 }
 
+    .toggle-sidebar {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 3;
+            transition: left 0.3s;
+        }
+
+        .toggle-sidebar.collapsed {
+            left: -20px;
+        }
+
     </style>
 </head>
 <body>
-
+<div class="toggle-sidebar" onclick="toogleSidebar()">&gt;</div>
 <div class="sidebar">
     <ul>
         <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
