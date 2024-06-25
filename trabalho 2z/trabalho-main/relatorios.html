@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - Loja de Produtos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            padding-top: 20px;
+            z-index: 2;
+            overflow-y: auto;
+            transition: left 0.3s;
+        }
+
+        .sidebar.visible {
+            left: 0;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #495057;
+        }
+
+        .sidebar ul li a .icon {
+            margin-right: 15px;
+        }
+
+        .toggle-sidebar {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 3;
+            transition: left 0.3s;
+            border-radius: 0 5px 5px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-sidebar.collapsed {
+            left: 230px; /* Ajuste conforme necessário */
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        .report {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 1 1 100%;
+            margin-bottom: 20px;
+        }
+
+        .report h2 {
+            margin-top: 0;
+            color: #343a40;
+        }
+
+        .filters {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filters select, #date-filter {
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        .sales-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .sales-table th, .sales-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .sales-table th {
+            background-color: #f0f0f0;
+        }
+
+        .total-section {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center.
+        }
+
+        .total-section .payment-total {
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .total-section .payment-total:nth-child(odd) {
+            background-color: #f0f0f0;
+        }
+
+        .total-section .total-amount {
+            font-weight: bold;
+        }
+
+        .pdf-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .pdf-button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -250px;
+            }
+
+            .sidebar.visible {
+                left: 0;
+            }
+
+            .toggle-sidebar {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toggle-sidebar" onclick="toggleSidebar()">❯</div>
+    <div class="sidebar hidden">
+        <ul>
+            <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
+            <li><a href="pdv.html"><i class="fas fa-cash-register icon"></i> PDV</a></li>
+            <li><a href="produtos.html"><i class="fas fa-boxes icon"></i> Produtos</a></li>
+            <li><a href="clientes.html"><i class="fas fa-users icon"></i> Clientes</a></li>
+            <li><a href="fornecedores.html"><i class="fas fa-truck icon"></i> Fornecedores</a></li>
+            <li><a href="relatorios.html"><i class="fas fa-chart-line icon"></i> Relatórios</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div class="report">
+            <h2>Relatório de Vendas</h2>
+            
+            <div class="filters">
+                <label for="payment-filter">Filtrar por Forma de Pagamento:</label>
+                <select id="payment-filter" onchange="filterSales(this.value)">
+                    <option value="todos">Todos</option>
+                    <option value="credito">Cartão de Crédito</option>
+                    <option value="debito">Cartão de Débito</option>
+                    <option value="dinheiro">Dinheiro</option>
+                </select>
+
+                <label for="date-filter">Filtrar por Período:</label>
+                <input type="date" id="date-filter" onchange="filterSalesByDate()">
+            </div>
+
+            <table class="sales-table" id="sales-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Forma de Pagamento</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-list">
+                    <!-- Aqui serão adicionadas as vendas dinamicamente -->
+                </tbody>
+            </table>
+
+            <div class="total-section">
+                <div class="payment-total" id="credit-total">
+                    Forma de pagamento - Cartão de Crédito: R$ <span id="credit-amount">0.00</span>
+                </div>
+                <div class="payment-total" id="debit-total">
+                    Forma de pagamento - Cartão de Débito: R$ <span id="debit-amount">0.00</span>
+                </div>
+                <div class="payment-total" id="cash-total">
+                    Forma de pagamento - Dinheiro: R$ <span id="cash-amount">0.00</span>
+                </div>
+                <div class="payment-total total-amount">
+                    Total de Vendas: R$ <span id="total-amount">0.00</span>
+                </div>
+            </div>
+
+            <button class="pdf-button" onclick="generatePDF()">Gerar PDF</button>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const container = document.querySelector('.container');
+            const toggleButton = document.querySelector('.toggle-sidebar');
+        
+            if (sidebar.style.left === '-250px') {
+                sidebar.style.left = '0';
+                container.style.marginLeft = '250px';
+                toggleButton.style.left = '250px';
+                toggleButton.innerHTML = '&lt;';
+            } else {
+                sidebar.style.left = '-250px';
+                container.style.marginLeft = '0px';
+                toggleButton.style.left = '0';
+                toggleButton.innerHTML = '&gt;';
+            }
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.querySelector('.toggle-sidebar');
+            if (sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+                sidebar.classList.add('visible');
+                toggleBtn.textContent = '❮';
+                toggleBtn.classList.remove('collapsed');
+            } else {
+                sidebar.classList.remove('visible');
+                sidebar.classList.add('hidden');
+                toggleBtn.textContent = '❯';
+                toggleBtn.classList.add('collapsed');
+            }    
+        }
+
+        // Funções adicionais como filterSales, filterSalesByDate e generatePDF podem ser implementadas aqui
+
+        // Função para filtrar vendas
+        function filterSales(paymentMethod) {
+            const sales = document.querySelectorAll('.sales-table tbody tr');
+            sales.forEach(sale => {
+                const paymentType = sale.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                if (paymentMethod === 'todos' || paymentType.includes(paymentMethod)) {
+                    sale.style.display = '';
+                } else {
+                    sale.style.display = 'none';
+                }
+            });
+            updateTotalAmount();
+        }
+
+        // Função para filtrar vendas por data
+        function filterSalesByDate() {
+            const selectedDate = new Date(document.getElementById('date-filter').value);
+            const sales = document.querySelectorAll('.sales-table tbody tr');
+            sales.forEach(sale => {
+                const saleDate = new Date(sale.querySelector('td:nth-child(2)').textContent);
+                if (selectedDate.toDateString() === saleDate.toDateString()) {
+                    sale.style.display = '';
+                } else {
+                    sale.style.display = 'none';
+                }
+            });
+            updateTotalAmount();
+        }
+
+        // Função para gerar PDF
+        function generatePDF() {
+            // Implementação para gerar o PDF aqui
+            alert('Função para gerar PDF não implementada ainda.');
+        }
+
+        // Função para atualizar o total de vendas exibido
+        function updateTotalAmount() {
+            let totalAmount = 0;
+            const sales = document.querySelectorAll('.sales-table tbody tr');
+            sales.forEach(sale => {
+                if (sale.style.display !== 'none') {
+                    totalAmount += parseFloat(sale.querySelector('td:nth-child(4)').textContent.replace('R$', '').replace(',', '.'));
+                }
+            });
+            document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
+        }
+
+        // Aparecer formulários com base no botão do menu clicado
+        function showFormulario(id) {
+            const formulario = document.getElementById(id);
+            formulario.style.display = "block";
+        }
+
+        // Fechar formulários
+        function closeFormulario(id) {
+            const formulario = document.getElementById(id);
+            formulario.style.display = "none";
+        }
+
+        // Exemplo de carrinho de compras
+        const cartItems = [];
+        const cartTableBody = document.getElementById('cart-items');
+        const totalPriceElement = document.getElementById('total-price');
+
+        function addToCart(productName, productPrice) {
+            cartItems.push({ name: productName, price: productPrice });
+            updateCart();
+        }
+
+        function updateCart() {
+            cartTableBody.innerHTML = '';
+            let totalPrice = 0;
+
+            cartItems.forEach((item, index) => {
+                const row = document.createElement('tr');
+
+                const nameCell = document.createElement('td');
+                nameCell.textContent = item.name;
+
+                const priceCell = document.createElement('td');
+                priceCell.textContent = `R$ ${item.price.toFixed(2)}`;
+
+                const removeCell = document.createElement('td');
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remover';
+                removeButton.onclick = () => removeFromCart(index);
+                removeCell.appendChild(removeButton);
+
+                row.appendChild(nameCell);
+                row.appendChild(priceCell);
+                row.appendChild(removeCell);
+
+                cartTableBody.appendChild(row);
+
+                totalPrice += item.price;
+            });
+
+            totalPriceElement.textContent = `R$ ${totalPrice.toFixed(2)}`;
+        }
+
+        function removeFromCart(index) {
+            cartItems.splice(index, 1);
+            updateCart();
+        }
+
+        function checkout() {
+            const paymentMethod = document.getElementById('payment-method').value;
+            const totalPrice = parseFloat(totalPriceElement.textContent.replace('R$', '').replace(',', '.'));
+
+            if (isNaN(totalPrice) || totalPrice <= 0) {
+                alert('Não foi possível realizar a compra. Nenhum valor especificado.');
+            } else {
+                alert(`Compra finalizada com ${paymentMethod}. Total: R$ ${totalPrice.toFixed(2).replace('.', ',')}`);
+                cartItems.length = 0; // Limpa o carrinho
+                updateCart();
+            }
+        }
+    </script>
+</body>
+</html>
+
