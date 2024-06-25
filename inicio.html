@@ -67,11 +67,12 @@
         }
 
         .container {
-            margin-left: 20px;
+            /* margin-left: 20px; */
             padding-top: 120px; /* Ajuste para garantir que o conteúdo não fique grudado no header */
             padding: 20px;
             width: calc(100% - 20px);
             transition: margin-left 0.3s;
+            margin-top: 50px;
         }
 
         .dashboard {
@@ -81,17 +82,33 @@
         }
 
         .dashboard .card {
+            display: flex;
+            align-items: center;
             background-color: #f8f9fa;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 10px;
             padding: 20px;
             margin: 10px;
             flex: 1 1 calc(33.333% - 20px);
             box-sizing: border-box;
+            transition: background-color 0.3s;
+        }
+
+        .dashboard .card:hover {
+            background-color: #e9ecef;
         }
 
         .dashboard .card:not(:last-child) {
             margin-bottom: 20px; /* Espaçamento vertical entre as caixas */
+        }
+
+        .dashboard .card .icon {
+            font-size: 2em;
+            margin-right: 15px; /* Espaçamento entre o ícone e o texto */
+        }
+
+        .dashboard .card .text {
+            flex-grow: 1;
         }
 
         .toggle-sidebar {
@@ -108,6 +125,16 @@
 
         .toggle-sidebar.collapsed {
             left: -20px;
+        }
+
+        .alt {
+            font-weight: bold;
+            color: #0a962b; /* Cor verde */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.103); /* Sombra no texto */
+            padding: 5px; /* Espaçamento interno */
+            border-radius: 3px; /* Borda arredondada */
+            display: inline-block; /* Para o elemento ocupar apenas o espaço necessário */
+            transition: transform 0.3s ease-in-out; /* Transição suave */
         }
     </style>
 </head>
@@ -128,37 +155,46 @@
     </ul>
 </div>
 
-<div class="toggle-sidebar" onclick="toogleSidebar()">&gt;</div>
+<div class="toggle-sidebar" onclick="toggleSidebar()">&gt;</div>
 
 <div class="container">
-    <br>
-    <br>
-    <h2></h2>
-    <br>
+   <br>
+    
     <div class="dashboard">
         <div class="card">
-            <h3>Vendas</h3>
-            <p>Resumo das vendas.</p>
+            <div class="icon"><i class="fas fa-chart-bar"></i></div>
+            <div class="text">
+                <h3>Vendas do Mês</h3>
+                <p class="alt">R$ 10.000,00 em Junho</p>
+            </div>
         </div>
         <div class="card">
-            <h3>Clientes</h3>
-            <p>Resumo dos clientes.</p>
+            <div class="icon"><i class="fas fa-calendar-day"></i></div>
+            <div class="text">
+                <h3>Vendas do Dia</h3>
+                <p class="alt">R$ 500,00 em 23 de Junho</p>
+            </div>
         </div>
         <div class="card">
-            <h3>Estoque</h3>
-            <p>Resumo do estoque.</p>
+            <div class="icon"><i class="fas fa-users"></i></div>
+            <div class="text">
+                <h3>Clientes Registrados</h3>
+                <p class="alt">500 Clientes</p>
+            </div>
         </div>
         <div class="card">
-            <h3>Financeiro</h3>
-            <p>Resumo financeiro.</p>
+            <div class="icon"><i class="fas fa-box"></i></div>
+            <div class="text">
+                <h3>Produtos Ativos</h3>
+                <p class="alt">200 Produtos</p>
+            </div>
         </div>
         <div class="card">
-            <h3>Pedidos</h3>
-            <p>Resumo dos pedidos.</p>
-        </div>
-        <div class="card">
-            <h3>Relatórios</h3>
-            <p>Resumo dos relatórios.</p>
+            <div class="icon"><i class="fas fa-box-open"></i></div>
+            <div class="text">
+                <h3>Produtos Inativos</h3>
+                <p class="alt">50 Produtos</p>
+            </div>
         </div>
     </div>
 </div>

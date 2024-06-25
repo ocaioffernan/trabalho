@@ -8,18 +8,18 @@
     <link rel="stylesheet" href="cart.css">
     <script defer src="script.js"></script>
     <style>
-    body {
-    display: flex;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    /* justify-content: center;  */
-    align-items: center; 
-    }
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .sidebar {
+        .sidebar {
             width: 250px;
             background-color: #343a40;
             height: 100vh;
@@ -29,6 +29,7 @@
             padding-top: 20px;
             z-index: 2;
             overflow-y: auto;
+            overflow-x: hidden; /* Adicionado para evitar barra de rolagem horizontal */
             transition: left 0.3s;
         }
 
@@ -62,163 +63,180 @@
             margin-right: 15px; /* Espaçamento entre os ícones e o nome */
         }
 
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Centraliza o conteúdo horizontalmente */
-    max-width: 1200px; /* Define a largura máxima da página */
-    width: 100%;
-    padding: 20px;
-    margin-left: 260px; /* Largura da sidebar */
-}
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Centraliza o conteúdo horizontalmente */
+            max-width: 1200px; 
+            width: 100%;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
 
-.product-list {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    flex: 1 1 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
+        .product-list {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            flex: 1 1 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
-.product-list h2 {
-    width: 100%;
-    margin-top: 0;
-    color: #343a40;
-}
+        .product-list h2 {
+            width: 100%;
+            margin-top: 0;
+            color: #343a40;
+            display: flex;
+            align-items: center;
+        }
 
-.product-item {
-    width: calc(25% - 20px);
-    cursor: pointer;
-}
+        .product-list h2 .icon {
+            margin-right: 10px;
+        }
 
-.product-item img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 5px;
-    transition: transform 0.3s;
-}
+        .product-item {
+            width: calc(25% - 20px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
 
-.product-item img:hover {
-    transform: scale(1.05);
-}
+        .product-item:hover {
+            background-color: #b1b5b92c;
+        }
 
-.product-item span {
-    display: block;
-    text-align: center;
-    margin-top: 5px;
-}
+        .product-item img {
+            width: 50px; /* Ajuste o tamanho da imagem conforme necessário */
+            height: 50px; /* Ajuste o tamanho da imagem conforme necessário */
+            object-fit: cover;
+            border-radius: 50%; /* Torna a imagem redonda */
+            margin-right: 10px;
+            transition: transform 0.3s;
+        }
 
-.cart-summary-container {
-    display: flex;
-    justify-content: center; /* Centraliza o conteúdo horizontalmente */
-    width: 100%;
-    max-width: 1200px; /* Define a largura máxima da seção */
-}
+        .product-item img:hover {
+            transform: scale(1.05);
+        }
 
-.cart {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex: 0 1 60%;
-    margin-right: 20px;
-}
+        .product-item span {
+            text-align: left;
+        }
 
-.cart h2 {
-    margin-top: 0;
-    color: #343a40;
-}
+        .cart-summary-container {
+            display: flex;
+            justify-content: center; /* Centraliza o conteúdo horizontalmente */
+            width: 100%;
+            max-width: 1200px; /* Define a largura máxima da seção */
+        }
 
-.cart table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        .cart {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 0 1 60%;
+            margin-right: 20px;
+        }
 
-.cart table, .cart th, .cart td {
-    border: 1px solid #ddd;
-}
+        .cart h2 {
+            margin-top: 0;
+            color: #343a40;
+        }
 
-.cart th, .cart td {
-    padding: 8px;
-    text-align: left;
-}
+        .cart table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-.summary {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex: 0 1 38%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+        .cart table, .cart th, .cart td {
+            border: 1px solid #ddd;
+        }
 
-.summary h2 {
-    margin-top: 0;
-    color: #343a40;
-}
+        .cart th, .cart td {
+            padding: 8px;
+            text-align: left;
+        }
 
-.summary .total {
-    font-weight: bold;
-}
+        .summary {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 0 1 38%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-.summary button {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .summary h2 {
+            margin-top: 0;
+            color: #343a40;
+        }
 
-.summary button:hover {
-    background-color: #0056b3;
-}
+        .summary .total {
+            font-weight: bold;
+        }
 
-@media (max-width: 1024px) {
-    .container {
-        padding: 10px;
-    }
-}
+        .summary button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-@media (max-width: 768px) {
-    .sidebar {
-        display: none; /* Esconde a sidebar em dispositivos menores */
-    }
+        .summary select {
+            padding: 8px;
+            font-size: 16px;
+        }
 
-    .product-item {
-        width: calc(50% - 10px);
-    }
+        .summary button:hover {
+            background-color: #0056b3;
+        }
 
-    .cart, .summary {
-        flex: 1 1 100%;
-        margin-right: 0;
-        margin-bottom: 20px;
-    }
+        @media (max-width: 1024px) {
+            .container {
+                padding: 10px;
+            }
+        }
 
-    .cart-summary-container {
-        flex-direction: column;
-        align-items: center; /* Centraliza verticalmente em dispositivos menores */
-    }
-}
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none; /* Esconde a sidebar em dispositivos menores */
+            }
 
-@media (max-width: 480px) {
-    .product-item {
-        width: 100%;
-    }
-}
+            .product-item {
+                width: calc(50% - 10px);
+            }
 
-    .toggle-sidebar {
+            .cart, .summary {
+                flex: 1 1 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .cart-summary-container {
+                flex-direction: column;
+                align-items: center; /* Centraliza verticalmente em dispositivos menores */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-item {
+                width: 100%;
+            }
+        }
+
+        .toggle-sidebar {
             position: fixed;
             top: 50%;
             left: 0;
@@ -233,11 +251,10 @@
         .toggle-sidebar.collapsed {
             left: -20px;
         }
-
     </style>
 </head>
 <body>
-<div class="toggle-sidebar" onclick="toogleSidebar()">&gt;</div>
+<div class="toggle-sidebar" onclick="toggleSidebar()">&gt;</div>
 <div class="sidebar">
     <ul>
         <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
@@ -251,18 +268,30 @@
 
 <div class="container">
     <div class="product-list">
-        <h2>Produtos Disponíveis</h2>
+        <h2><i class="fas fa-boxes icon"></i>Produtos Disponíveis</h2>
         <div class="product-item" onclick="addToCart('Produto 1', 10.00)">
-            <img src="https://via.placeholder.com/150" alt="Produto 1">
+            <img src="carroryr.png" alt="Produto 1">
             <span>Produto 1 - R$10,00</span>
         </div>
         <div class="product-item" onclick="addToCart('Produto 2', 20.00)">
-            <img src="https://via.placeholder.com/150" alt="Produto 2">
+            <img src="carroryr.png" alt="Produto 2">
             <span>Produto 2 - R$20,00</span>
         </div>
         <div class="product-item" onclick="addToCart('Produto 3', 30.00)">
-            <img src="https://via.placeholder.com/150" alt="Produto 3">
+            <img src="carroryr.png" alt="Produto 3">
             <span>Produto 3 - R$30,00</span>
+        </div>
+        <div class="product-item" onclick="addToCart('Produto 4', 40.00)">
+            <img src="carroryr.png" alt="Produto 4">
+            <span>Produto 4 - R$40,00</span>
+        </div>
+        <div class="product-item" onclick="addToCart('Produto 5', 50.00)">
+            <img src="https://via.placeholder.com/50" alt="Produto 5">
+            <span>Produto 5 - R$50,00</span>
+        </div>
+        <div class="product-item" onclick="addToCart('Produto 6', 60.00)">
+            <img src="https://via.placeholder.com/50" alt="Produto 6">
+            <span>Produto 6 - R$60,00</span>
         </div>
         <!-- Adicione mais produtos conforme necessário -->
     </div>
@@ -298,3 +327,67 @@
     </div>
 </div>
 
+<script>
+    function addToCart(product, price) {
+        const cartItems = document.getElementById('cart-items');
+        const rows = cartItems.getElementsByTagName('tr');
+    
+        // Verifica se o produto já está no carrinho
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            if (row.cells[0].innerText === product) {
+                // Se o produto já está no carrinho, incrementa a quantidade
+                let quantity = parseInt(row.cells[2].innerText);
+                row.cells[2].innerText = quantity + 1;
+    
+                // Atualiza o total
+                updateTotal(price);
+                return; // Encerra a função
+            }
+        }
+    
+        // Se o produto não está no carrinho, adiciona uma nova linha
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>${product}</td>
+            <td>R$${price.toFixed(2)}</td>
+            <td>1</td>
+            <td><button onclick="removeFromCart(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+        `;
+        cartItems.appendChild(newRow);
+    
+        // Atualiza o total
+        updateTotal(price);
+    }
+    
+    function updateTotal(price) {
+        const totalElement = document.getElementById('total');
+        const currentTotal = parseFloat(totalElement.innerText);
+        const newTotal = currentTotal + price;
+        totalElement.innerText = newTotal.toFixed(2);
+    }
+    
+    function removeFromCart(button) {
+        const row = button.parentNode.parentNode;
+        const price = parseFloat(row.cells[1].innerText.substring(2)); // Extrai o preço do texto
+        const quantity = parseInt(row.cells[2].innerText);
+    
+        if (quantity > 1) {
+            // Se a quantidade for maior que 1, decrementa a quantidade
+            row.cells[2].innerText = quantity - 1;
+        } else {
+            // Se a quantidade for 1, remove a linha do carrinho
+            row.parentNode.removeChild(row);
+        }
+    
+        // Atualiza o total
+        updateTotal(-price);
+    }
+    
+    function confirmPurchase() {
+        alert('Compra confirmada!');
+    }
+    </script>
+    
+</body>
+</html>

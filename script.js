@@ -11,13 +11,11 @@
             toggleButton.innerHTML = '&lt;';
         } else {
             sidebar.style.left = '-250px';
-            container.style.marginLeft = '20px';
+            container.style.marginLeft = '0px';
             toggleButton.style.left = '0';
             toggleButton.innerHTML = '&gt;';
         }
     });
-
-
 
 
 

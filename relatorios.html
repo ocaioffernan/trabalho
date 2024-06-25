@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatórios - Loja de Produtos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="script.js">
     <style>
         body {
             display: flex;
@@ -17,7 +16,6 @@
             justify-content: center; /* Centraliza o conteúdo horizontalmente */
             align-items: center; /* Centraliza o conteúdo verticalmente */
         }
-
         .sidebar {
             width: 250px;
             background-color: #343a40;
@@ -61,6 +59,22 @@
             margin-right: 15px; /* Espaçamento entre os ícones e o nome */
         }
 
+        .toggle-sidebar {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 3;
+            transition: left 0.3s;
+        }
+
+        .toggle-sidebar.collapsed {
+            left: -20px;
+        }
+
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -68,7 +82,8 @@
             max-width: 1200px; /* Define a largura máxima da página */
             width: 100%;
             padding: 20px;
-            margin-left: 260px; /* Largura da sidebar */
+            /* margin-left: 20px;  */
+            transition: margin-left 0.3s;
         }
 
         .report {
@@ -93,7 +108,7 @@
             align-items: center;
         }
 
-        .filters select {
+        .filters select, #date-filter {
             padding: 8px;
             font-size: 16px;
         }
@@ -148,22 +163,6 @@
             background-color: #0056b3;
         }
 
-        .toggle-sidebar {
-            position: fixed;
-            top: 50%;
-            left: 0;
-            background-color: #343a40;
-            color: white;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 3;
-            transition: left 0.3s;
-        }
-
-        .toggle-sidebar.collapsed {
-            left: -20px;
-        }
-
         @media (max-width: 1024px) {
             .container {
                 padding: 10px;
@@ -179,15 +178,11 @@
                 flex: 1 1 100%;
             }
         }
-
-
-
     </style>
 </head>
 <body>
 
-<div class="toggle-sidebar" onclick="toogleSidebar()">&gt;</div>
-
+    <div class="toggle-sidebar" onclick="toogleSidebar()">&gt;</div>
 <div class="sidebar">
     <ul>
         <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
@@ -249,6 +244,6 @@
     </div>
 </div>
 
-<script src="reports.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
