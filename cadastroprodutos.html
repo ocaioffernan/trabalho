@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 900px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #343a40;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 3px;
+        }
+
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        .form-group .btn-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-group .btn-group a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 15px;
+            background-color: #6c757d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-group .btn-group a:hover {
+            background-color: #5a6268;
+        }
+
+        .success-message {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2><i class="fas fa-boxes icon"></i> Cadastro de Produto</h2>
+        <div class="success-message" id="successMessage">
+            Produto cadastrado com sucesso!
+        </div>
+        <form id="productForm">
+            <div class="form-group">
+                <label for="productCode">Código do Produto</label>
+                <input type="text" id="productCode" required>
+            </div>
+            <div class="form-group">
+                <label for="productName">Nome do Produto</label>
+                <input type="text" id="productName" required>
+            </div>
+            <div class="form-group">
+                <label for="productImage">Foto do Produto</label>
+                <input type="file" id="productImage" required>
+            </div>
+            <div class="form-group">
+                <label for="productQuantity">Quantidade</label>
+                <input type="number" id="productQuantity" required>
+            </div>
+            <div class="form-group">
+                <label for="purchasePrice">Preço de Compra</label>
+                <input type="number" id="purchasePrice" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="salePrice">Preço de Venda</label>
+                <input type="number" id="salePrice" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="supplier">Fornecedor</label>
+                <select id="supplier" required>
+                    <option value="">Escolha um fornecedor</option>
+                    <option value="fornecedor1">Fornecedor 1</option>
+                    <option value="fornecedor2">Fornecedor 2</option>
+                </select>
+            </div>
+            <div class="form-group btn-group">
+                <button type="submit">Cadastrar</button>
+                <button type="button" onclick="clearForm()">Limpar</button>
+                <button type="button" onclick="window.location.href='index.html'">Voltar</button>
+                <button type="button" id="editButton" style="display: none;">Alterar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let editingProduct = null;
+
+        document.getElementById('productForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (editingProduct) {
+                saveEditProduct();
+            } else {
+                addProduct();
+            }
+        });
+
+        function clearForm() {
+            document.getElementById('productForm').reset();
+            editingProduct = null;
+            document.getElementById('editButton').style.display = 'none';
+        }
+
+        function addProduct() {
+            const productCode = document.getElementById('productCode').value;
+            const productName = document.getElementById('productName').value;
+            const productQuantity = document.getElementById('productQuantity').value;
+            const purchasePrice = document.getElementById('purchasePrice').value;
+            const salePrice = document.getElementById('salePrice').value;
+            const supplier = document.getElementById('supplier').value;
+            const productImage = document.getElementById('productImage').files[0];
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const productImageData = event.target.result;
+
+                const products = JSON.parse(localStorage.getItem('products')) || [];
+                products.push({ productCode, productName, productQuantity, purchasePrice, salePrice, supplier, productImage: productImageData });
+                localStorage.setItem('products', JSON.stringify(products));
+
+                clearForm();
+                showSuccessMessage();
+                setTimeout(hideSuccessMessage, 3000);
+            };
+            reader.readAsDataURL(productImage);
+        }
+
+        function saveEditProduct() {
+            const productCode = document.getElementById('productCode').value;
+            const productName = document.getElementById('productName').value;
+            const productQuantity = document.getElementById('productQuantity').value;
+            const purchasePrice = document.getElementById('purchasePrice').value;
+            const salePrice = document.getElementById('salePrice').value;
+            const supplier = document.getElementById('supplier').value;
+            const productImage = document.getElementById('productImage').files[0];
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const productImageData = event.target.result;
+
+                let products = JSON.parse(localStorage.getItem('products')) || [];
+                products = products.map(product => {
+                    if (product.productCode === editingProduct) {
+                        return { productCode, productName, productQuantity, purchasePrice, salePrice, supplier, productImage: productImageData };
+                    }
+                    return product;
+                });
+                localStorage.setItem('products', JSON.stringify(products));
+
+                clearForm();
+                showSuccessMessage();
+                setTimeout(hideSuccessMessage, 3000);
+            };
+            reader.readAsDataURL(productImage);
+        }
+
+        function showSuccessMessage() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+        }
+
+        function hideSuccessMessage() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'none';
+        }
+
+        function loadProductToEdit() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const editCode = urlParams.get('edit');
+            if (editCode) {
+                let products = JSON.parse(localStorage.getItem('products')) || [];
+                const product = products.find(product => product.productCode === editCode);
+                if (product) {
+                    document.getElementById('productCode').value = product.productCode;
+                    document.getElementById('productName').value = product.productName;
+                    document.getElementById('productQuantity').value = product.productQuantity;
+                    document.getElementById('purchasePrice').value = parseFloat(product.purchasePrice).toFixed(2);
+                    document.getElementById('salePrice').value = parseFloat(product.salePrice).toFixed(2);
+                    document.getElementById('supplier').value = product.supplier;
+                    editingProduct = product.productCode;
+                    document.getElementById('editButton').style.display = 'inline-block';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProductToEdit);
+    </script>
+</body>
+</html>
