@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos</title>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            flex-grow: 1;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #343a40;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        img {
+            max-width: 50px;
+        }
+        .btn {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .action-btn {
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        .fa-edit {
+            color: #007bff;
+        }
+        .fa-trash {
+            color: #dc3545;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            padding-top: 20px;
+            z-index: 2;
+            overflow-y: auto;
+            transition: left 0.3s;
+        }
+
+        .sidebar.show {
+            left: 0;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #495057;
+        }
+
+        .sidebar ul li a .icon {
+            margin-right: 15px;
+        }
+
+        .toggle-sidebar {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 3;
+            transition: left 0.3s;
+        }
+
+        .toggle-sidebar.collapsed {
+            left: -20px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -250px;
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toggle-sidebar" onclick="toggleSidebar()">❯</div>
+    <div class="sidebar hidden">
+        <ul>
+            <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
+            <li><a href="pdv.html"><i class="fas fa-cash-register icon"></i> PDV</a></li>
+            <li><a href="produtos.html"><i class="fas fa-boxes icon"></i> Produtos</a></li>
+            <li><a href="clientes.html"><i class="fas fa-users icon"></i> Clientes</a></li>
+            <li><a href="fornecedores.html"><i class="fas fa-truck icon"></i> Fornecedores</a></li>
+            <li><a href="relatorios.html"><i class="fas fa-chart-line icon"></i> Relatórios</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2><i class="fas fa-boxes"></i> Produtos</h2>
+        <a href="cadastroprodutos.html" class="btn">Cadastrar Produto</a>
+        <h3>Lista de Produtos</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Produto</th>
+                    <th>Imagem</th>
+                    <th>Quantidade</th>
+                    <th>Preço de Compra</th>
+                    <th>Preço de Venda</th>
+                    <th>Fornecedor</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody id="productList">
+                <!-- Os produtos serão inseridos aqui -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function loadProducts() {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            const productList = document.getElementById('productList');
+
+            productList.innerHTML = '';
+
+            products.forEach(product => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${product.productCode}</td>
+                    <td>${product.productName}</td>
+                    <td><img src="${product.productImage}" alt="${product.productName}"></td>
+                    <td>${product.productQuantity}</td>
+                    <td>R$ ${parseFloat(product.purchasePrice).toFixed(2)}</td>
+                    <td>R$ ${parseFloat(product.salePrice).toFixed(2)}</td>
+                    <td>${product.supplier}</td>
+                    <td>
+                        <i class="fas fa-edit action-btn" onclick="editProduct('${product.productCode}')"></i>
+                        <i class="fas fa-trash action-btn" onclick="deleteProduct('${product.productCode}')"></i>
+                    </td>
+                `;
+
+                productList.appendChild(row);
+            });
+        }
+
+        function editProduct(code) {
+            window.location.href = `cadastroprodutos.html?edit=${code}`;
+        }
+
+        function deleteProduct(code) {
+            let products = JSON.parse(localStorage.getItem('products')) || [];
+            products = products.filter(product => product.productCode !== code);
+            localStorage.setItem('products', JSON.stringify(products));
+            loadProducts();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+</body>
+</html>
+

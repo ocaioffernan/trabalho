@@ -194,7 +194,7 @@
             transition: background-color 0.3s;
         }
 
-        .summary select {
+        .summary select, input {
             padding: 8px;
             font-size: 16px;
         }
@@ -211,7 +211,7 @@
 
         @media (max-width: 768px) {
             .sidebar {
-                display: none; /* Esconde a sidebar em dispositivos menores */
+                left: 0; /* Mostrar a sidebar em dispositivos menores */
             }
 
             .product-item {
@@ -254,140 +254,75 @@
     </style>
 </head>
 <body>
-<div class="toggle-sidebar" onclick="toggleSidebar()">&gt;</div>
-<div class="sidebar">
-    <ul>
-        <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
-        <li><a href="pdv.html"><i class="fas fa-cash-register icon"></i> PDV</a></li>
-        <li><a href="produtos.html"><i class="fas fa-boxes icon"></i> Produtos</a></li>
-        <li><a href="clientes.html"><i class="fas fa-users icon"></i> Clientes</a></li>
-        <li><a href="fornecedores.html"><i class="fas fa-truck icon"></i> Fornecedores</a></li>
-        <li><a href="relatorios.html"><i class="fas fa-chart-line icon"></i> Relatórios</a></li>
-    </ul>
-</div>
-
-<div class="container">
-    <div class="product-list">
-        <h2><i class="fas fa-boxes icon"></i>Produtos Disponíveis</h2>
-        <div class="product-item" onclick="addToCart('Produto 1', 10.00)">
-            <img src="carroryr.png" alt="Produto 1">
-            <span>Produto 1 - R$10,00</span>
-        </div>
-        <div class="product-item" onclick="addToCart('Produto 2', 20.00)">
-            <img src="carroryr.png" alt="Produto 2">
-            <span>Produto 2 - R$20,00</span>
-        </div>
-        <div class="product-item" onclick="addToCart('Produto 3', 30.00)">
-            <img src="carroryr.png" alt="Produto 3">
-            <span>Produto 3 - R$30,00</span>
-        </div>
-        <div class="product-item" onclick="addToCart('Produto 4', 40.00)">
-            <img src="carroryr.png" alt="Produto 4">
-            <span>Produto 4 - R$40,00</span>
-        </div>
-        <div class="product-item" onclick="addToCart('Produto 5', 50.00)">
-            <img src="https://via.placeholder.com/50" alt="Produto 5">
-            <span>Produto 5 - R$50,00</span>
-        </div>
-        <div class="product-item" onclick="addToCart('Produto 6', 60.00)">
-            <img src="https://via.placeholder.com/50" alt="Produto 6">
-            <span>Produto 6 - R$60,00</span>
-        </div>
-        <!-- Adicione mais produtos conforme necessário -->
+    <div class="toggle-sidebar" onclick="toggleSidebar()">❯</div>
+    <div class="sidebar hidden">
+        <ul>
+            <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
+            <li><a href="pdv.html"><i class="fas fa-cash-register icon"></i> PDV</a></li>
+            <li><a href="produtos.html"><i class="fas fa-boxes icon"></i> Produtos</a></li>
+            <li><a href="clientes.html"><i class="fas fa-users icon"></i> Clientes</a></li>
+            <li><a href="fornecedores.html"><i class="fas fa-truck icon"></i> Fornecedores</a></li>
+            <li><a href="relatorios.html"><i class="fas fa-chart-line icon"></i> Relatórios</a></li>
+        </ul>
     </div>
 
-    <div class="cart-summary-container">
-        <div class="cart">
-            <h2>Carrinho</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Produto</th>
-                        <th>Preço Unitário</th>
-                        <th>Quantidade</th>
-                    </tr>
-                </thead>
-                <tbody id="cart-items"></tbody>
-            </table>
-        </div>
-
-        <div class="summary">
-            <h2>Resumo</h2>
-            <div class="total">Total: R$<span id="total">0.00</span></div>
-            <div>
-                <label for="payment-method">Forma de Pagamento:</label>
-                <select id="payment-method">
-                    <option value="credit-card">Cartão de Crédito</option>
-                    <option value="debit-card">Cartão de Débito</option>
-                    <option value="cash">Dinheiro</option>
-                </select>
+    <div class="container">
+        <div class="product-list">
+            <h2><i class="fas fa-boxes icon"></i>Produtos Disponíveis</h2>
+            <div class="product-item" onclick="addToCart('Produto 1', 10.00)">
+                <img src="carroryr.png" alt="Produto 1">
+                <span>Produto 1 - R$10,00</span>
             </div>
-            <button onclick="confirmPurchase()">Confirmar Compra</button>
+            <div class="product-item" onclick="addToCart('Produto 2', 20.00)">
+                <img src="carroryr.png" alt="Produto 2">
+                <span>Produto 2 - R$20,00</span>
+            </div>
+            <div class="product-item" onclick="addToCart('Produto 3', 30.00)">
+                <img src="carroryr.png" alt="Produto 3">
+                <span>Produto 3 - R$30,00</span>
+            </div>
+            <div class="product-item" onclick="addToCart('Produto 4', 40.00)">
+                <img src="carroryr.png" alt="Produto 4">
+                <span>Produto 4 - R$40,00</span>
+            </div>
+            <!-- Adicione mais produtos conforme necessário -->
+        </div>
+        <div class="cart-summary-container">
+            <div class="cart">
+                <h2><i class="fas fa-shopping-cart icon"></i>Carrinho</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Preço</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-items">
+                        <!-- Itens do carrinho serão adicionados aqui -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="summary">
+                <h2>Resumo</h2>
+                <p class="total">Total: R$ <span id="total">0,00</span></p>
+                <select id="payment-method">
+                    <option value="pix">PIX</option>
+                    <option value="credito">Cartão de Crédito</option>
+                    <option value="debito">Cartão de Débito</option>
+                    <option value="dinheiro">Dinheiro</option>
+                </select>
+                <div id="troco-dinheiro" style="display: none">
+                    <label for="number">Valor Pago:</label>
+                    <input type="number">
+                    <p>O troco é: <span id="troco">0,00</span></p>
+                </div>
+
+                <button onclick="checkout()">Finalizar Compra</button>
+            </div>
         </div>
     </div>
-</div>
-
-<script>
-    function addToCart(product, price) {
-        const cartItems = document.getElementById('cart-items');
-        const rows = cartItems.getElementsByTagName('tr');
-    
-        // Verifica se o produto já está no carrinho
-        for (let i = 0; i < rows.length; i++) {
-            let row = rows[i];
-            if (row.cells[0].innerText === product) {
-                // Se o produto já está no carrinho, incrementa a quantidade
-                let quantity = parseInt(row.cells[2].innerText);
-                row.cells[2].innerText = quantity + 1;
-    
-                // Atualiza o total
-                updateTotal(price);
-                return; // Encerra a função
-            }
-        }
-    
-        // Se o produto não está no carrinho, adiciona uma nova linha
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td>${product}</td>
-            <td>R$${price.toFixed(2)}</td>
-            <td>1</td>
-            <td><button onclick="removeFromCart(this)"><i class="fa-regular fa-trash-can"></i></button></td>
-        `;
-        cartItems.appendChild(newRow);
-    
-        // Atualiza o total
-        updateTotal(price);
-    }
-    
-    function updateTotal(price) {
-        const totalElement = document.getElementById('total');
-        const currentTotal = parseFloat(totalElement.innerText);
-        const newTotal = currentTotal + price;
-        totalElement.innerText = newTotal.toFixed(2);
-    }
-    
-    function removeFromCart(button) {
-        const row = button.parentNode.parentNode;
-        const price = parseFloat(row.cells[1].innerText.substring(2)); // Extrai o preço do texto
-        const quantity = parseInt(row.cells[2].innerText);
-    
-        if (quantity > 1) {
-            // Se a quantidade for maior que 1, decrementa a quantidade
-            row.cells[2].innerText = quantity - 1;
-        } else {
-            // Se a quantidade for 1, remove a linha do carrinho
-            row.parentNode.removeChild(row);
-        }
-    
-        // Atualiza o total
-        updateTotal(-price);
-    }
-    
-    function confirmPurchase() {
-        alert('Compra confirmada!');
-    }
-    </script>
-    
 </body>
 </html>
+
+           

@@ -13,24 +13,25 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            justify-content: center; /* Centraliza o conteúdo horizontalmente */
-            align-items: center; /* Centraliza o conteúdo verticalmente */
+            justify-content: center;
+            align-items: center;
         }
+
         .sidebar {
             width: 250px;
             background-color: #343a40;
             height: 100vh;
             position: fixed;
             top: 0;
-            left: -250px; /* Sidebar escondida inicialmente */
+            left: -250px;
             padding-top: 20px;
             z-index: 2;
             overflow-y: auto;
             transition: left 0.3s;
         }
 
-        .sidebar.hidden {
-            left: -250px; /* Posição para esconder a sidebar completamente */
+        .sidebar.visible {
+            left: 0;
         }
 
         .sidebar ul {
@@ -56,33 +57,37 @@
         }
 
         .sidebar ul li a .icon {
-            margin-right: 15px; /* Espaçamento entre os ícones e o nome */
+            margin-right: 15px;
         }
 
         .toggle-sidebar {
             position: fixed;
             top: 50%;
             left: 0;
+            transform: translateY(-50%);
             background-color: #343a40;
             color: white;
             padding: 10px;
             cursor: pointer;
             z-index: 3;
             transition: left 0.3s;
+            border-radius: 0 5px 5px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .toggle-sidebar.collapsed {
-            left: -20px;
+            left: 230px;
         }
 
         .container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center; /* Centraliza o conteúdo horizontalmente */
-            max-width: 1200px; /* Define a largura máxima da página */
+            justify-content: center;
+            max-width: 1200px;
             width: 100%;
             padding: 20px;
-            /* margin-left: 20px;  */
             transition: margin-left 0.3s;
         }
 
@@ -171,79 +176,176 @@
 
         @media (max-width: 768px) {
             .sidebar {
-                display: none; /* Esconde a sidebar em dispositivos menores */
+                left: -250px;
             }
 
-            .report {
-                flex: 1 1 100%;
+            .sidebar.visible {
+                left: 0;
+            }
+
+            .toggle-sidebar {
+                display: block;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="toggle-sidebar" onclick="toogleSidebar()">&gt;</div>
-<div class="sidebar">
-    <ul>
-        <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
-        <li><a href="pdv.html"><i class="fas fa-cash-register icon"></i> PDV</a></li>
-        <li><a href="produtos.html"><i class="fas fa-boxes icon"></i> Produtos</a></li>
-        <li><a href="clientes.html"><i class="fas fa-users icon"></i> Clientes</a></li>
-        <li><a href="fornecedores.html"><i class="fas fa-truck icon"></i> Fornecedores</a></li>
-        <li><a href="relatorios.html"><i class="fas fa-chart-line icon"></i> Relatórios</a></li>
-    </ul>
-</div>
-
-<div class="container">
-    <div class="report">
-        <h2>Relatório de Vendas</h2>
-        
-        <div class="filters">
-            <label for="payment-filter">Filtrar por Forma de Pagamento:</label>
-            <select id="payment-filter" onchange="filterSales(this.value)">
-                <option value="todos">Todos</option>
-                <option value="credito">Cartão de Crédito</option>
-                <option value="debito">Cartão de Débito</option>
-                <option value="dinheiro">Dinheiro</option>
-            </select>
-
-            <label for="date-filter">Filtrar por Período:</label>
-            <input type="date" id="date-filter" onchange="filterSalesByDate()">
-        </div>
-
-        <table class="sales-table" id="sales-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Data</th>
-                    <th>Forma de Pagamento</th>
-                    <th>Valor</th>
-                </tr>
-            </thead>
-            <tbody id="sales-list">
-                <!-- Aqui serão adicionadas as vendas dinamicamente -->
-            </tbody>
-        </table>
-
-        <div class="total-section">
-            <div class="payment-total" id="credit-total">
-                Forma de pagamento - Cartão de Crédito: R$ <span id="credit-amount">0.00</span>
-            </div>
-            <div class="payment-total" id="debit-total">
-                Forma de pagamento - Cartão de Débito: R$ <span id="debit-amount">0.00</span>
-            </div>
-            <div class="payment-total" id="cash-total">
-                Forma de pagamento - Dinheiro: R$ <span id="cash-amount">0.00</span>
-            </div>
-            <div class="payment-total total-amount">
-                Total de Vendas: R$ <span id="total-amount">0.00</span>
-            </div>
-        </div>
-
-        <button class="pdf-button" onclick="generatePDF()">Gerar PDF</button>
+    <div class="toggle-sidebar" onclick="toggleSidebar()">❯</div>
+    <div class="sidebar hidden">
+        <ul>
+            <li><a href="inicio.html"><i class="fas fa-home icon"></i> Início</a></li>
+            <li><a href="pdv.html"><i class="fas fa-cash-register icon"></i> PDV</a></li>
+            <li><a href="produtos.html"><i class="fas fa-boxes icon"></i> Produtos</a></li>
+            <li><a href="clientes.html"><i class="fas fa-users icon"></i> Clientes</a></li>
+            <li><a href="fornecedores.html"><i class="fas fa-truck icon"></i> Fornecedores</a></li>
+            <li><a href="relatorios.html"><i class="fas fa-chart-line icon"></i> Relatórios</a></li>
+        </ul>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <div class="container">
+        <div class="report">
+            <h2>Relatório de Vendas</h2>
+            
+            <div class="filters">
+                <label for="payment-filter">Filtrar por Forma de Pagamento:</label>
+                <select id="payment-filter" onchange="filterSales(this.value)">
+                    <option value="todos">Todos</option>
+                    <option value="credito">Cartão de Crédito</option>
+                    <option value="debito">Cartão de Débito</option>
+                    <option value="dinheiro">Dinheiro</option>
+                </select>
+
+                <label for="date-filter">Filtrar por Período:</label>
+                <input type="date" id="date-filter" onchange="filterSalesByDate()">
+            </div>
+
+            <table class="sales-table" id="sales-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Forma de Pagamento</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-list">
+                    <tr>
+                        <td>1</td>
+                        <td>2024-06-25</td>
+                        <td>Dinheiro</td>
+                        <td>R$ 150.00</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2024-06-24</td>
+                        <td>Cartão de Crédito</td>
+                        <td>R$ 250.00</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>2024-06-23</td>
+                        <td>Cartão de Débito</td>
+                        <td>R$ 100.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="total-section">
+                <div class="payment-total" id="credit-total">
+                    Forma de pagamento - Cartão de Crédito: R$ <span id="credit-amount">400.00</span>
+                </div>
+                <div class="payment-total" id="debit-total">
+                    Forma de pagamento - Cartão de Débito: R$ <span id="debit-amount">100.00</span>
+                </div>
+                <div class="payment-total" id="cash-total">
+                    Forma de pagamento - Dinheiro: R$ <span id="cash-amount">150.00</span>
+                </div>
+                <div class="payment-total total-amount">
+                    Total de Vendas: R$ <span id="total-amount">650.00</span>
+                </div>
+            </div>
+
+            <button class="pdf-button" onclick="generatePDF()">Gerar PDF</button>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const container = document.querySelector('.container');
+            const toggleButton = document.querySelector('.toggle-sidebar');
+        
+            if (sidebar.style.left === '-250px') {
+                sidebar.style.left = '0';
+                container.style.marginLeft = '250px';
+                toggleButton.style.left = '250px';
+                toggleButton.innerHTML = '&lt;';
+            } else {
+                sidebar.style.left = '-250px';
+                container.style.marginLeft = '0px';
+                toggleButton.style.left = '0';
+                toggleButton.innerHTML = '&gt;';
+            }
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.querySelector('.toggle-sidebar');
+            if (sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+                sidebar.classList.add('visible');
+                toggleBtn.textContent = '❮';
+                toggleBtn.classList.remove('collapsed');
+            } else {
+                sidebar.classList.remove('visible');
+                sidebar.classList.add('hidden');
+                toggleBtn.textContent = '❯';
+                toggleBtn.classList.add('collapsed');
+            }    
+        }
+
+        function filterSales(paymentMethod) {
+            const sales = document.querySelectorAll('.sales-table tbody tr');
+            sales.forEach(sale => {
+                const paymentType = sale.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                if (paymentMethod === 'todos' || paymentType.includes(paymentMethod)) {
+                    sale.style.display = '';
+                } else {
+                    sale.style.display = 'none';
+                }
+            });
+            updateTotalAmount();
+        }
+
+        function filterSalesByDate() {
+            const selectedDate = new Date(document.getElementById('date-filter').value);
+            const sales = document.querySelectorAll('.sales-table tbody tr');
+            sales.forEach(sale => {
+                const saleDate = new Date(sale.querySelector('td:nth-child(2)').textContent);
+                if (selectedDate.toDateString() === saleDate.toDateString()) {
+                    sale.style.display = '';
+                } else {
+                    sale.style.display = 'none';
+                }
+            });
+            updateTotalAmount();
+        }
+
+        function generatePDF() {
+            alert('Função para gerar PDF não implementada ainda.');
+        }
+
+        function updateTotalAmount() {
+            let totalAmount = 0;
+            const sales = document.querySelectorAll('.sales-table tbody tr');
+            sales.forEach(sale => {
+                if (sale.style.display !== 'none') {
+                    totalAmount += parseFloat(sale.querySelector('td:nth-child(4)').textContent.replace('R$', '').replace(',', '.'));
+                }
+            });
+            document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
+        }
+    </script>
 </body>
 </html>
